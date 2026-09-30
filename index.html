@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation - DropIt</title>
+    
+    <!-- Tailwind CSS pour le design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastel: { green: '#e8f5e9', yellow: '#fefce8' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden; /* Empêche le scroll horizontal pendant les animations */
+        }
+
+        /* --- CLASSES D'ANIMATION AU DÉFILEMENT --- */
+        .observe-me {
+            will-change: opacity, transform;
+        }
+
+        /* Apparition simple vers le haut */
+        .anim-fade-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        /* Glissement depuis la gauche */
+        .anim-slide-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Glissement depuis la droite */
+        .anim-slide-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 1s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Zoom avant (Scale up) */
+        .anim-zoom-in {
+            opacity: 0;
+            transform: scale(0.85);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* La classe ajoutée par Javascript quand l'élément est à l'écran */
+        .is-visible {
+            opacity: 1 !important;
+            transform: translate(0, 0) scale(1) !important;
+        }
+
+        /* Délais pour créer des effets en cascade */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* --- STYLES DU SIMULATEUR (déjà présents) --- */
+        .switch-toggle { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch-toggle input { opacity: 0; width: 0; height: 0; }
+        .slider-round { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1d5db; transition: .4s; border-radius: 34px; }
+        .slider-round:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider-round { background-color: #22c55e; }
+        input:checked + .slider-round:before { transform: translateX(26px); }
+        .oled-screen { background-color: #111; color: #4ade80; font-family: 'Courier New', Courier, monospace; text-shadow: 0 0 5px rgba(74, 222, 128, 0.5); }
+
+
+
+        .trou{
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased selection:bg-green-200 selection:text-green-900">
+
+    <!-- HEADER / TITRE -->
+    <header class="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-white px-6">
+        <!-- Taches de couleurs animées en fond -->
+        <div class="absolute top-10 left-10 w-[30rem] h-[30rem] bg-green-100 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse"></div>
+        <div class="absolute bottom-10 right-10 w-[30rem] h-[30rem] bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-60 animate-pulse" style="animation-delay: 2s;"></div>
+        
+        <div class="relative z-10 text-center max-w-4xl mx-auto observe-me anim-zoom-in">
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gray-900 text-white font-medium text-sm mb-8 shadow-xl">
+                Mini-Projet SIN
+            </div>
+            <h1 class="text-7xl md:text-9xl font-extrabold text-green-950 tracking-tighter mb-4">
+                Drop<span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">It</span>
+            </h1>
+            
+            <div class="mt-16 animate-bounce text-green-300">
+                <svg class="w-10 h-10 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. SOMMAIRE -->
+    <section class="py-24 bg-pastel-green px-6 border-y border-green-100">
+        <div class="max-w-4xl mx-auto observe-me anim-fade-up">
+            <div class="bg-white p-12 rounded-[3rem] shadow-xl relative">
+                <div class="absolute -top-8 left-12 bg-green-500 text-white px-8 py-3 rounded-full text-2xl font-bold shadow-lg">1. Sommaire</div>
+                <div class="mt-8 space-y-4 text-gray-600 text-xl border-l-4 border-green-200 pl-8 py-4">
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Introduction</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Composants</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Problème et solution</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Chaîne d'information & d'énergie</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Organigramme</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Simulation Interactive</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Le Code</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Possible Upgrade</p>
+                    <p class="hover:text-green-600 transition-colors cursor-pointer">- Conclusion</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. INTRO -->
+    <section class="min-h-[70vh] flex items-center bg-gray-900 py-24 px-6 text-white overflow-hidden relative">
+        <div class="absolute right-[-10%] top-1/4 w-96 h-96 border-[40px] border-gray-800 rounded-full opacity-50"></div>
+        <div class="max-w-6xl mx-auto w-full flex flex-col md:flex-row items-center gap-16 z-10">
+            <div class="w-full md:w-1/3 observe-me anim-slide-left">
+                <h2 class="text-5xl md:text-7xl font-bold text-green-400 mb-6">2. Intro</h2>
+            </div>
+            <div class="w-full md:w-2/3 observe-me anim-slide-right bg-gray-800 p-10 rounded-3xl border border-gray-700 shadow-2xl">
+                <p class="text-xl leading-relaxed text-gray-300">
+                    Le système permet d'automatiser un arrosage en récupérant le pourcentage d'humidité du sol. Le systeme d'arrosage peut être desactivé pour ne laisser que l'affichage du pourcentage
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. COMPOSANTS -->
+    <section class="py-32 bg-white px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20 observe-me anim-fade-up">
+                <h2 class="text-5xl font-bold text-gray-900 mb-6">3. Composants</h2>
+                <div class="w-32 h-2 bg-gradient-to-r from-green-400 to-yellow-400 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Pico -->
+                <div class="observe-me anim-zoom-in bg-gray-50 rounded-[2rem] p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="h-48 flex items-center justify-center bg-white rounded-2xl mb-6 p-4 shadow-inner">
+                        <img src="pico.png" alt="Raspberry Pi Pico Shield" class="max-h-full object-contain">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Raspberry Pi Pico</h3>
+                    <p class="text-gray-500">Le cerveau du système qui traite les données</p>
+                </div>
+                <!-- Capteur -->
+                <div class="observe-me anim-zoom-in delay-100 bg-gray-50 rounded-[2rem] p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="h-48 flex items-center justify-center bg-white rounded-2xl mb-6 p-4 shadow-inner">
+                        <img src="soil-sensor.png" alt="Capteur humidité" class="max-h-full object-contain">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Capteur d'humidité</h3>
+                    <p class="text-gray-500">Mesure l'humidité du sol</p>
+                </div>
+                <!-- OLED -->
+                <div class="observe-me anim-zoom-in delay-200 bg-gray-50 rounded-[2rem] p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="h-48 flex items-center justify-center bg-white rounded-2xl mb-6 p-4 shadow-inner">
+                        <img src="oled.png" alt="Écran OLED" class="max-h-full object-contain">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Écran OLED</h3>
+                    <p class="text-gray-500">Interface visuelle pour lire les données</p>
+                </div>
+                <!-- Interrupteur -->
+                <div class="observe-me anim-zoom-in delay-300 bg-gray-50 rounded-[2rem] p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300 lg:col-start-2">
+                    <div class="h-48 flex items-center justify-center bg-white rounded-2xl mb-6 p-4 shadow-inner">
+                        <img src="switch.png" alt="Interrupteur Switch" class="max-h-full object-contain">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">Interrupteur</h3>
+                    <p class="text-gray-500">Contrôle manuel pour activer le système d'arrosage</p>
+                </div>
+                <!-- LED/Pompe -->
+                <div class="observe-me anim-zoom-in delay-400 bg-gray-50 rounded-[2rem] p-8 shadow-lg border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="h-48 flex items-center justify-center bg-white rounded-2xl mb-6 p-4 shadow-inner">
+                        <img src="led.jpg" alt="Module LED" class="max-h-full object-contain">
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-3">LED (Simulateur Pompe)</h3>
+                    <p class="text-gray-500">Représente visuellement l'activation de la pompe</p>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. PROBLÈME & SOLUTION -->
+    <section class="py-32 bg-gray-50 px-6 overflow-hidden">
+        <div class="max-w-5xl mx-auto flex flex-col gap-16">
+            <!-- Bloc Problème (Glisse de la gauche) -->
+            <div class="observe-me anim-slide-left bg-red-50 p-12 rounded-[2rem] border border-red-100 shadow-xl relative md:w-4/5">
+                <div class="absolute -top-6 -left-6 bg-red-500 text-white w-14 h-14 flex items-center justify-center rounded-full text-3xl font-bold shadow-lg">?</div>
+                <h3 class="text-4xl font-extrabold text-red-900 mb-6">4. Le Problème</h3>
+                <p class="text-xl text-red-800/80 leading-relaxed">
+                    Quand les deux broches du capteur d'humidité était touchées en meme temps le code plantait
+                </p>
+            </div>
+            
+            <!-- Bloc Solution (Glisse de la droite) -->
+            <div class="observe-me anim-slide-right bg-green-100 p-12 rounded-[2rem] border border-green-200 shadow-xl relative self-end md:w-4/5">
+                <div class="absolute -top-6 -right-6 bg-green-500 text-white w-14 h-14 flex items-center justify-center rounded-full text-3xl font-bold shadow-lg">!</div>
+                <h3 class="text-4xl font-extrabold text-green-900 mb-6">La Solution</h3>
+                <p class="text-xl text-green-800/80 leading-relaxed">
+                    Nous savons tout simplement changé de capteur d'humidité pour un avec la connectique grove (pico = grove, ancien hum ≠ grove)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CHAINE D'ÉNERGIE -->
+    <section class="py-32 bg-white px-6 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 observe-me anim-fade-up">
+                <h2 class="text-4xl font-bold text-gray-900">5. Chaîne d'information & d'énergie</h2>
+            </div>
+            <div class="observe-me anim-zoom-in bg-gray-50 p-6 md:p-12 rounded-[3rem] shadow-2xl border border-gray-200 flex justify-center">
+                <img src="Chaine.png" alt="Schéma de la chaîne d'énergie et d'information" class="max-w-full h-auto rounded-xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. ORGANIGRAMME -->
+    <section class="py-32 bg-pastel-yellow px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="w-full md:w-1/2 observe-me anim-slide-left">
+                <h2 class="text-5xl font-bold text-gray-900 mb-8">6. Organigramme</h2>
+                <div class="bg-white/60 p-8 rounded-3xl shadow-sm border border-yellow-200">
+                    <p class="text-xl text-gray-700 leading-relaxed">
+                        Ce schéma organigramme représente le fonctionnement du système
+                    </p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 flex justify-center observe-me anim-zoom-in delay-200">
+                <!-- Effet 3D léger au survol -->
+                <div class="bg-white p-4 rounded-[2rem] shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <img src="DropIt.png" alt="Organigramme du programme" class="max-h-[700px] w-auto rounded-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. SIMULATION -->
+    <section class="py-32 bg-gray-900 text-white px-6">
+        <div class="max-w-5xl mx-auto observe-me anim-fade-up">
+            
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-bold mb-6">7. Simulation Interactive</h2>
+            </div>
+
+            <div class="bg-gray-800 rounded-[3rem] shadow-2xl p-8 md:p-12 border border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    
+                    <!-- Colonne Entrées -->
+                    <div class="space-y-8 bg-gray-900 p-8 rounded-[2rem] border border-gray-700 shadow-inner">
+                        <h3 class="text-2xl font-bold text-blue-400 flex items-center gap-3 border-b border-gray-700 pb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                            Capteur hum
+                        </h3>
+
+                        <div class="flex justify-between items-center bg-gray-800 p-6 rounded-2xl">
+                            <div>
+                                <p class="text-lg font-bold text-white">Interrupteur</p>
+                                <p class="text-sm text-gray-400" id="switch-status-text">Système Désactivé</p>
+                            </div>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="sim-switch">
+                                <span class="slider-round"></span>
+                            </label>
+                        </div>
+
+                        <div class="bg-gray-800 p-6 rounded-2xl">
+                            <div class="flex justify-between items-center mb-6">
+                                <p class="text-lg font-bold text-white">Humidité du sol</p>
+                                <span class="bg-blue-500/20 text-blue-400 text-lg font-bold px-3 py-1 rounded-lg border border-blue-500/30" id="humidity-display">55%</span>
+                            </div>
+                            <input type="range" id="sim-humidity" min="0" max="100" value="55" class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-500">
+                            <div class="flex justify-between text-sm text-gray-500 mt-3 font-medium">
+                                <span>0% (Sec)</span>
+                                <span class="text-red-400">Seuil: 45%</span>
+                                <span>100% (Humide)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Colonne Sorties -->
+                    <div class="space-y-8 bg-gray-800 p-8 rounded-[2rem] border border-gray-600 shadow-xl">
+                        <h3 class="text-2xl font-bold text-green-400 flex items-center gap-3 border-b border-gray-700 pb-4">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            Pompe (LED)
+                        </h3>
+
+                        <div>
+                            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Écran OLED</p>
+                            <div class="oled-screen p-6 rounded-xl border-4 border-gray-900 shadow-inner text-xl">
+                                <div class="flex justify-between mb-2">
+                                    <span>SYSTEME:</span>
+                                    <span id="oled-sys">OFF</span>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span>HUMIDITE:</span>
+                                    <span id="oled-hum">55%</span>
+                                </div>
+                                <div class="flex justify-between mt-4 pt-4 border-t border-green-900/50">
+                                    <span>POMPE:</span>
+                                    <span id="oled-pump" class="text-green-900 opacity-50">STOP</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center bg-gray-900 p-8 rounded-2xl border border-gray-700">
+                            <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">État de la LED</p>
+                            <div id="sim-led" class="w-24 h-24 rounded-full bg-gray-700 border-4 border-gray-600 shadow-inner transition-all duration-300"></div>
+                            <p id="led-text" class="mt-6 text-xl font-bold text-gray-500">Pompe à l'arrêt</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. CODE -->
+    <section class="py-32 bg-white px-6">
+        <div class="max-w-4xl mx-auto observe-me anim-slide-right">
+            <h2 class="text-4xl font-bold text-gray-900 mb-10">8. Le Code</h2>
+            
+            <!-- Fausse fenêtre de code stylée -->
+            <div class="bg-[#1e1e1e] rounded-2xl shadow-2xl overflow-hidden border border-gray-300 transform hover:scale-[1.02] transition-transform duration-300">
+                <div class="bg-[#2d2d2d] px-4 py-3 flex items-center gap-2 border-b border-gray-800">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span class="ml-4 text-gray-400 text-sm font-mono">main.py / main.ino</span>
+                </div>
+                <div class="p-8 text-green-400 font-mono text-sm md:text-base leading-relaxed whitespace-pre-wrap overflow-x-auto">
+A ajouter (ne pas oublier)
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. CONCLUSION -->
+    <section class="py-32 bg-gradient-to-b from-white to-pastel-green px-6 border-t border-green-50">
+
+        <div class="max-w-4xl mx-auto text-center observe-me anim-zoom-in">
+            <h2 class="text-5xl font-extrabold text-green-900 mb-10">9. Possible Upgrade</h2>
+            <div class="bg-white p-12 rounded-[3rem] shadow-xl border border-green-100">
+                <p class="text-2xl text-gray-600 leading-relaxed font-light">
+                    Créer une application (pour afficher le pourcentage sans regarder l'écran) avec un backend Python (flask) et un frontend en React. Faire communiquer le système et l'appli avec une Rest API (fastAPI)
+                </p>
+            </div>
+        </div>
+        <div class="trou"></div>
+        <div class="max-w-4xl mx-auto text-center observe-me anim-zoom-in">
+            <h2 class="text-5xl font-extrabold text-green-900 mb-10">10. Conclusion</h2>
+            <div class="bg-white p-12 rounded-[3rem] shadow-xl border border-green-100">
+                <p class="text-2xl text-gray-600 leading-relaxed font-light">
+                    Pour conclure, le sytème est capable de détecter si la plante/sol a besoin d'être arrosée ou non. Et affiche le pourcentage d'humidité sur un écran
+                </p>
+            </div>
+        </div>
+        
+        
+    </section>
+
+
+    <!-- SCRIPT POUR LES ANIMATIONS ET LE SIMULATEUR -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. MOTEUR D'ANIMATION AU DÉFILEMENT (Intersection Observer) ---
+            const animatables = document.querySelectorAll('.observe-me');
+            
+            const appearOptions = {
+                threshold: 0.15, // Se déclenche quand 15% de l'élément est visible
+                rootMargin: "0px 0px -50px 0px" // Anticipe un peu avant le bas de l'écran
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Ne joue l'animation qu'une seule fois
+                    }
+                });
+            }, appearOptions);
+
+            animatables.forEach(el => {
+                appearOnScroll.observe(el);
+            });
+
+            // --- 2. LOGIQUE DU SIMULATEUR ---
+            const toggleSwitch = document.getElementById('sim-switch');
+            const humiditySlider = document.getElementById('sim-humidity');
+            
+            const switchStatusText = document.getElementById('switch-status-text');
+            const humidityDisplay = document.getElementById('humidity-display');
+            
+            const oledSys = document.getElementById('oled-sys');
+            const oledHum = document.getElementById('oled-hum');
+            const oledPump = document.getElementById('oled-pump');
+            
+            const simLed = document.getElementById('sim-led');
+            const ledText = document.getElementById('led-text');
+
+            function updateSystem() {
+                const isActive = toggleSwitch.checked;
+                const humidityValue = parseInt(humiditySlider.value);
+
+                // Maj Interface Entrées
+                switchStatusText.textContent = isActive ? "Système Activé" : "Système Désactivé";
+                switchStatusText.className = isActive ? "text-sm text-green-400 font-bold" : "text-sm text-gray-400";
+                humidityDisplay.textContent = humidityValue + "%";
+
+                // Maj OLED
+                oledSys.textContent = isActive ? "ON" : "OFF";
+                oledHum.textContent = humidityValue + "%";
+
+                // LOGIQUE D'ARROSAGE
+                if (isActive && humidityValue < 45) {
+                    // ALLUMÉ
+                    simLed.className = "w-24 h-24 rounded-full bg-green-400 border-4 border-green-200 shadow-[0_0_40px_15px_rgba(74,222,128,0.4)] transition-all duration-300";
+                    ledText.textContent = "Arrosage en cours !";
+                    ledText.className = "mt-6 text-xl font-bold text-green-400 animate-pulse";
+                    
+                    oledPump.textContent = "MARCHE";
+                    oledPump.className = "text-white animate-pulse";
+                } else {
+                    // ÉTEINT
+                    simLed.className = "w-24 h-24 rounded-full bg-gray-700 border-4 border-gray-600 shadow-inner transition-all duration-300";
+                    ledText.textContent = "Pompe à l'arrêt";
+                    ledText.className = "mt-6 text-xl font-bold text-gray-500";
+                    
+                    oledPump.textContent = "STOP";
+                    oledPump.className = "text-green-900 opacity-50";
+                }
+            }
+
+            toggleSwitch.addEventListener('change', updateSystem);
+            humiditySlider.addEventListener('input', updateSystem);
+
+            // Init au démarrage
+            updateSystem();
+        });
+    </script>
+</body>
+</html>
